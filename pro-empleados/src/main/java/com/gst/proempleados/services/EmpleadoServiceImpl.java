@@ -1,6 +1,7 @@
 package com.gst.proempleados.services;
 
 
+import com.gst.proempleados.clients.DepartamentoClienteRest;
 import com.gst.proempleados.models.entity.Empleado;
 import com.gst.proempleados.repositories.EmpleadoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,25 +9,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.Normalizer;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
-public class EmpleadoServiceImpl implements EmpleadoService {
-    //@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+public class EmpleadoServiceImpl implements EmpleadoService{
 
     @Autowired
     private EmpleadoRepository repository;
-
-
-
+    @Autowired
+    private DepartamentoClienteRest client;
     @Override
     @Transactional(readOnly = true)
     public List<Empleado> listar() {
-        //return (List<Curso>)repository.findAll();
-        return (List<Empleado>) repository.findAll();
+        return (List<Empleado>)repository.findAll();
     }
 
     @Override
@@ -37,18 +35,66 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 
     @Override
     @Transactional
-    public Empleado guardar(Empleado curso) {
-        String codigo = setCodigo(curso);// Lógica para generar el código personalizado
-        curso.setCodigo(codigo);
+    public Empleado guardar(Empleado empleado) {
 
-        return repository.save(curso);
+        String codigo = setCodigo(empleado);// Lógica para generar el código personalizado
+        empleado.setCodigo(codigo);
+
+        return repository.save(empleado);
     }
 
-    @Override
+   /* @Override
     @Transactional
     public void eliminar(Long id) {
         repository.deleteById(id);
+    }*/
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Empleado> listarPorIds(Iterable<Long> ids) {
+        return (List<Empleado>) repository.findAllById(ids);
     }
+
+    @Override
+    public Optional<Empleado> porEmail(String email) {
+        return repository.findByEmail(email);
+    }
+
+
+    public void eliminar(Long id){
+        repository.deleteById(id);
+        //client.eliminarCursoUsuarioPorId(id);
+
+    }
+
+    @Override
+    public List<Empleado> listarPorGenero(String genero) {
+        return repository.findByGenero(genero);
+    }
+
+    @Override
+    public List<Empleado> listarPorNacimientolistarPorNacimiento(LocalDate fechaInicio, LocalDate fechaFin) {
+
+        if (fechaInicio != null && fechaFin != null) {
+            // Se busca por fecha completa
+            return repository.findByFechaNacimientoBetween(fechaInicio, fechaFin);
+        } else if (fechaInicio != null && fechaInicio.getYear() != 0 && fechaFin != null && fechaFin.getYear() != 0) {
+            // Se busca por años
+            LocalDate inicio = LocalDate.of(fechaInicio.getYear(), 1, 1);
+            LocalDate fin = LocalDate.of(fechaFin.getYear(), 12, 31);
+            return repository.findByFechaNacimientoBetween(inicio, fin);
+        } else if (fechaInicio != null && fechaInicio.getYear() != 0 && fechaInicio.getMonth() != null && fechaInicio.getMonthValue() != 0
+                && fechaFin != null && fechaFin.getYear() != 0 && fechaFin.getMonth() != null && fechaFin.getMonthValue() != 0) {
+            // Se busca por mes y año
+            LocalDate inicio = LocalDate.of(fechaInicio.getYear(), fechaInicio.getMonth(), 1);
+            LocalDate fin = LocalDate.of(fechaFin.getYear(), fechaFin.getMonth(), fechaFin.lengthOfMonth());
+            return repository.findByFechaNacimientoBetween(inicio, fin);
+        } else {
+            // Caso de error
+            throw new IllegalArgumentException("Fechas inválidas");
+        }
+    }
+
 
     public String setCodigo(Empleado empleado) {
 
@@ -77,4 +123,3 @@ public class EmpleadoServiceImpl implements EmpleadoService {
         return id;
     }
 }
-
