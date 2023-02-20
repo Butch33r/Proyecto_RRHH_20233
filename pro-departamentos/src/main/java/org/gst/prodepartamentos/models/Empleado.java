@@ -3,7 +3,7 @@ package org.gst.prodepartamentos.models;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.*;
+
 import lombok.Data;
 
 import java.time.LocalDate;
