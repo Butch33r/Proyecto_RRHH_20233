@@ -17,6 +17,8 @@ public interface EmpleadoService {
     Optional<Empleado> porEmail(String email);
 
     List<Empleado> listarPorGenero(String genero);
+    List<Empleado> listarPorApellido(String apellido);
     List<Empleado> listarPorNacimientolistarPorNacimiento(LocalDate fechaInicio, LocalDate fechaFin);
+
 
 }

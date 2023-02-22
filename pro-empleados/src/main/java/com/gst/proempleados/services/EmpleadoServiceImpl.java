@@ -73,6 +73,11 @@ public class EmpleadoServiceImpl implements EmpleadoService{
     }
 
     @Override
+    public List<Empleado> listarPorApellido(String apellido) {
+        return repository.findByApellido(apellido);
+    }
+
+    @Override
     public List<Empleado> listarPorNacimientolistarPorNacimiento(LocalDate fechaInicio, LocalDate fechaFin) {
 
         if (fechaInicio != null && fechaFin != null) {

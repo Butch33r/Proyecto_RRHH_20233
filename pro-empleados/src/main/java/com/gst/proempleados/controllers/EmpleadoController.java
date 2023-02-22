@@ -91,6 +91,16 @@ public class EmpleadoController {
 
     }
 
+    @GetMapping("/empleados-por-apellido")
+    public ResponseEntity<?> listarPorApellido(@RequestParam(required = false) String apellido) {
+
+        if (apellido == null) {
+            return ResponseEntity.badRequest().body("El parámetro 'apellido' es requerido.");
+        }
+        return ResponseEntity.ok(service.listarPorApellido(apellido));
+
+    }
+
     @GetMapping("/empleados-por-fechaNacimiento")
     public ResponseEntity<?> listarPorFechaNacimiento(@RequestParam String fechaIn, @RequestParam String fechaFin) {
         LocalDate fechaInicio, fechaFi;

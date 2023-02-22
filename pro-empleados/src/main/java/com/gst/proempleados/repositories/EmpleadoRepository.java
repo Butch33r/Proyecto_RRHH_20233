@@ -12,5 +12,7 @@ public interface EmpleadoRepository extends JpaRepository<Empleado, Long> {
     Optional<Empleado> findByEmail(String email);
     List<Empleado> findByGenero(String genero);
 
+    List<Empleado> findByApellido(String genero);
+
     List<Empleado> findByFechaNacimientoBetween(LocalDate fechaInicio, LocalDate fechaFin);
 }
