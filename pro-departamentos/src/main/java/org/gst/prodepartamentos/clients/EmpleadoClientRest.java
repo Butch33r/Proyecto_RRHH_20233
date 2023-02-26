@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 
-@FeignClient(name = "msvc-empleados", url="localhost:8002/api/empleado")
+@FeignClient(name = "msvc-empleados", url="host.docker.internal:8002/api/empleado")
+// @FeignClient(name = "msvc-empleados", url="localhost:8002/api/empleado")
 public interface EmpleadoClientRest {
     @GetMapping("/{id}")
     Empleado detalle(@PathVariable Long id);

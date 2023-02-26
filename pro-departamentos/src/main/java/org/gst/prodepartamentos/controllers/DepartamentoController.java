@@ -1,6 +1,7 @@
 package org.gst.prodepartamentos.controllers;
 
 import feign.FeignException;
+
 import org.gst.prodepartamentos.models.Empleado;
 import org.gst.prodepartamentos.models.entity.Departamento;
 import org.gst.prodepartamentos.services.DepartamentoService;
@@ -120,7 +121,6 @@ public class DepartamentoController {
         service.eliminarDepartamentoEmpleadoPorId(id);
         return ResponseEntity.notFound().build();
     }
-
     @GetMapping("/empleados-por-genero/{id}")
     public ResponseEntity<?> obtenerEmpleadosPorGenero(@PathVariable Long id,@RequestParam(required = false)  String genero) {
 
@@ -141,7 +141,7 @@ public class DepartamentoController {
     }
 
     @GetMapping("/empleados-por-fechaNacimiento/{id}")
-    public ResponseEntity<?> obtenerEmpleadosPorGenero(@PathVariable Long id,@RequestParam String fechaIni,@RequestParam String fechaFi) {
+    public ResponseEntity<?> obtenerEmpleadosPorFecha(@PathVariable Long id,@RequestParam String fechaIni,@RequestParam String fechaFi) {
         try {
             Optional<Departamento> op = service.listarPorNacimientolistar(id,fechaIni,fechaFi);
             if(op.isPresent()){
